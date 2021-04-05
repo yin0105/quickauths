@@ -1,0 +1,113 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+    <div class=" text-center mt-2 ">
+        <h1>Prime Eligibility Check</h1>
+    </div>
+</div>
+<div class="row mt-3"></div>
+<div class="col-md-12">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="col-md-4">
+            <div class="form-group"> <label for="form_name">Member ID</label> {{ form.memberid(id="form_name", type="text", class="form-control", placeholder="Member ID", required="required") }} </div>
+        </div>
+        <div class="row mt-3"></div>
+        <div class="col-md-1"><button type="submit" class="btn btn-primary btn-send pt-2 btn-block ">Add</button></div>
+    </form>
+    <div class="row mt-3"></div>
+    <table class="table" id="my-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Member ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Eligibility</th>
+                <th scope="col">Status</th>
+                <th scope="col">Check</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in data %}
+            <tr>
+                <td>{{ member.member_ID }}</td>
+                <td>{{ member.firstName }}</td>
+                <td>{{ member.lastName }}</td>
+                <td>{{ member.eligibility }}</td>
+                <td>{{ member.status }}</td>
+                <td>
+                    <form action="{{ url_for('submit_prime_eligibility', member_id=member.member_ID) }}" method="POST">
+                        <button class="btn btn-primary" type="submit">Check</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ url_for('delete_prime_member', member_id=member.member_ID) }}" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-send pt-2 btn-block " data-toggle="modal" data-target="#uploadModal">Upload</button>
+        </div>
+        <div class="col-md-2">
+            <form action="{{ url_for('export_prime_eligibility') }}" method="POST">
+                <button type="submit" class="btn btn-primary btn-send pt-2 btn-block ">Export</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form action="{{ url_for('submit_prime_eligibility', member_id=0) }}" method="POST">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary btn-send pt-2 btn-block ">Check Eligibility</button>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="checkbox" class="btn-check" id="flexCheckDefault" name="browser" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="flexCheckDefault">Browser</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <form action="{{ url_for('delete_all_prime_member') }}" method="POST">
+                <button type="submit" class="btn btn-danger btn-send pt-2 btn-block ">Delete All</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload CSV?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <form method="POST" action="{{ url_for('upload_prime_eligibility') }}" enctype="multipart/form-data">
+                                <input type="file" name="file">
+                                <div class="row mt-3"></div>
+                                <button type="submit" class="btn btn-primary btn-send pt-2 btn-block ">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row mt-3"></div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-secondary btn-send pt-2 btn-block " data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

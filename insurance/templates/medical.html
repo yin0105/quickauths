@@ -1,0 +1,398 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+    <div class=" text-center mt-2 ">
+        <h1>Medi-Cal Auth Request</h1>
+    </div>
+    <div class="row ">
+        <div class="col-lg mx-auto">
+            <div class="card mt-2 mx-auto p-4 bg-light">
+                <div class="card-body bg-light">
+                    <div class="container">
+                        <form method="POST" action="" id="template_form" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="controls">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-inline"> <label for="form_name">Member ID: &nbsp;</label> {{ form.memberid(id="form_name", type="text", class="form-control", placeholder="Member ID") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-inline"> <label for="form_name">DOB: &nbsp;</label> {{ form.dob(id="dob", type="text", class="form-control", placeholder="MM/DD/YYYY") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-inline"> <label for="form_name">Frequency: &nbsp;</label> {{ form.frequency(id="form_frequency", type="text", class="form-control", placeholder="Frequency") }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-5">
+                                        <table class="table" id="input-table">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">ICD10</th>
+                                                    <th scope="col">CPT</th>
+                                                    <th scope="col">Unit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <script type="text/javascript">
+                                        $(document).ready(function() {
+                                            for (var i = 0; i < 7; ++i) {
+                                                $('#input-table > tbody:last').append('<tr><td><input id="icd10_' + (i + 1) + '" type="text" name="icd10_' + (i + 1) + '" class="form-control"></td><td><input id="cpt_' + (i + 1) + '" type="text" name="cpt_' + (i + 1) + '" class="form-control"></td><td><input id="unit_' + (i + 1) + '" type="text" name="unit_' + (i + 1) + '" class="form-control"></td></tr>');
+                                            }
+                                        });
+
+                                        window.onload = function() {
+                                            var today = new Date();
+                                            var end = new Date();
+                                            end.setDate(end.getDate() + 90);
+                                            var dd = String(today.getDate()).padStart(2, '0');
+                                            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                            var yyyy = today.getFullYear();
+                                            today = mm + '/' + dd + '/' + yyyy;
+                                            var dd = String(end.getDate()).padStart(2, '0');
+                                            var mm = String(end.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                            var yyyy = end.getFullYear();
+                                            end = mm + '/' + dd + '/' + yyyy;
+                                            document.getElementById('start_date').value = today;
+                                            document.getElementById('end_date').value = end;
+                                        }
+
+                                        function updateText() {
+                                            var template = document.getElementById('template')
+                                            if (template.selectedIndex == 0) {
+                                                $("#template_form")[0].reset();
+                                            } else {
+                                                var icd1 = template.options[template.selectedIndex].getAttribute("icd1");
+                                                var icd2 = template.options[template.selectedIndex].getAttribute("icd2");
+                                                var icd3 = template.options[template.selectedIndex].getAttribute("icd3");
+                                                var icd4 = template.options[template.selectedIndex].getAttribute("icd4");
+                                                var icd5 = template.options[template.selectedIndex].getAttribute("icd5");
+                                                var icd6 = template.options[template.selectedIndex].getAttribute("icd6");
+                                                var icd7 = template.options[template.selectedIndex].getAttribute("icd7");
+                                                document.getElementById('icd10_1').value = icd1;
+                                                document.getElementById('icd10_2').value = icd2;
+                                                document.getElementById('icd10_3').value = icd3;
+                                                document.getElementById('icd10_4').value = icd4;
+                                                document.getElementById('icd10_5').value = icd5;
+                                                document.getElementById('icd10_6').value = icd6;
+                                                document.getElementById('icd10_7').value = icd7;
+                                                var CPT1 = template.options[template.selectedIndex].getAttribute("CPT1");
+                                                var CPT2 = template.options[template.selectedIndex].getAttribute("CPT2");
+                                                var CPT3 = template.options[template.selectedIndex].getAttribute("CPT3");
+                                                var CPT4 = template.options[template.selectedIndex].getAttribute("CPT4");
+                                                var CPT5 = template.options[template.selectedIndex].getAttribute("CPT5");
+                                                var CPT6 = template.options[template.selectedIndex].getAttribute("CPT6");
+                                                var CPT7 = template.options[template.selectedIndex].getAttribute("CPT7");
+                                                document.getElementById('cpt_1').value = CPT1;
+                                                document.getElementById('cpt_2').value = CPT2;
+                                                document.getElementById('cpt_3').value = CPT3;
+                                                document.getElementById('cpt_4').value = CPT4;
+                                                document.getElementById('cpt_5').value = CPT5;
+                                                document.getElementById('cpt_6').value = CPT6;
+                                                document.getElementById('cpt_7').value = CPT7;
+                                                var CPTUnit1 = template.options[template.selectedIndex].getAttribute("CPTUnit1");
+                                                var CPTUnit2 = template.options[template.selectedIndex].getAttribute("CPTUnit2");
+                                                var CPTUnit3 = template.options[template.selectedIndex].getAttribute("CPTUnit3");
+                                                var CPTUnit4 = template.options[template.selectedIndex].getAttribute("CPTUnit4");
+                                                var CPTUnit5 = template.options[template.selectedIndex].getAttribute("CPTUnit5");
+                                                var CPTUnit6 = template.options[template.selectedIndex].getAttribute("CPTUnit6");
+                                                var CPTUnit7 = template.options[template.selectedIndex].getAttribute("CPTUnit7");
+                                                document.getElementById('unit_1').value = CPTUnit1;
+                                                document.getElementById('unit_2').value = CPTUnit2;
+                                                document.getElementById('unit_3').value = CPTUnit3;
+                                                document.getElementById('unit_4').value = CPTUnit4;
+                                                document.getElementById('unit_5').value = CPTUnit5;
+                                                document.getElementById('unit_6').value = CPTUnit6;
+                                                document.getElementById('unit_7').value = CPTUnit7;
+                                                var today = new Date();
+                                                var end = new Date();
+                                                end.setDate(end.getDate() + 90);
+                                                var dd = String(today.getDate()).padStart(2, '0');
+                                                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                                var yyyy = today.getFullYear();
+                                                today = mm + '/' + dd + '/' + yyyy;
+                                                var dd = String(end.getDate()).padStart(2, '0');
+                                                var mm = String(end.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                                var yyyy = end.getFullYear();
+                                                end = mm + '/' + dd + '/' + yyyy;
+                                                document.getElementById('start_date').value = today;
+                                                document.getElementById('end_date').value = end;
+                                                var message = template.options[template.selectedIndex].getAttribute("message");
+                                                document.getElementById('message').value = message;
+                                                var medical_justification = template.options[template.selectedIndex].getAttribute("medical");
+                                                document.getElementById('medical_justification').value = medical_justification;
+                                                var template_name = template.options[template.selectedIndex].getAttribute("template_name");
+                                                document.getElementById('template_name').value = template_name;
+                                                var frequency = template.options[template.selectedIndex].getAttribute("frequency");
+                                                document.getElementById('form_frequency').value = frequency;
+                                                var emr = template.options[template.selectedIndex].getAttribute("emr");
+                                                document.getElementById('flexCheckDefaultEMR').value = emr;
+                                            }
+                                        }
+                                    </script>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-md">
+                                                &nbsp;&nbsp;&nbsp;&nbsp; {{ form.emr(class="form-check-input", type="checkbox", value="", id="flexCheckDefaultEMR") }}
+                                                <label class="form-check-label" for="flexCheckDefaultEMR">Enter in EMR</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">Active Case Name: &nbsp;</label> {{ form.case_name(id="form_case", type="text", class="form-control", placeholder="Case Name") }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                &nbsp;&nbsp;&nbsp;&nbsp; {{ form.urgent(class="form-check-input", type="checkbox", value="", id="flexCheckDefaultUrgent") }}
+                                                <label class="form-check-label" for="flexCheckDefaultUrgent">Urgent</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">Referring MD: &nbsp;</label> {{ form.referring(id="referring_md", type="text", class="form-control", placeholder="Referring MD") }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">Start Date: &nbsp;</label> {{ form.start_date(id="start_date", type="text", class="form-control", placeholder="MM/DD/YYYY") }}</div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">Prescription Date: &nbsp;</label> {{ form.prescription_date(id="prescription_date", type="text", class="form-control", placeholder="MM/DD/YYYY") }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">End Date: &nbsp;</label> {{ form.end_date(id="end_date", type="text", class="form-control", placeholder="MM/DD/YYYY") }} </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">Onset Date: &nbsp;</label> {{ form.onset_date(id="onset_date", type="text", class="form-control", placeholder="MM/DD/YYYY") }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md" id="fileList">
+                                                <label for="exampleFormControlFile1" id="exampleFormControlFile1">Add Files</label>
+                                                <input type="file" class="form-control-file" id="files[]" name="files[]" autocomplete="off" />
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-inline"> <label for="form_name">Gender: &nbsp;</label> {{ form.gender(id="gender", type="text", class="form-control", placeholder="Gender") }} </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="form-group"> <label for="form_message">Message:</label> <textarea id="message" name="message" class="form-control" placeholder="Write your message here." rows="4"></textarea> </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-group"> <label for="form_message">Medical Justification:</label> <textarea id="medical_justification" name="medical_justification" class="form-control" placeholder="Write your medical justification here." rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5"> {{ form.submit(type="submit", class="btn btn-primary btn-send pt-2 btn-block ", value="Add Member") }}</div>
+                                            <div class="col-md-5"> <button class="btn btn-danger btn-send pt-2 btn-block " value="Clear" onclick="resetForm()">Clear</button> </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary btn-send pt-2 btn-block" type="submit">Save Template</button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="dropdown">
+                                            <select class="btn btn-primary btn-send pt-2 btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="template" onchange="updateText()">
+                                                <option value="default">Load Template</option>
+                                                {% for template in templates %} {% if template.name|length %}
+                                                <option class="dropdown item" value={{template.id}} icd1="{{template.icd1}}"
+                                                    icd2="{{template.icd2}}" icd3="{{template.icd3}}" icd4="{{template.icd4}}"
+                                                    icd5="{{template.icd5}}" icd6="{{template.icd6}}" icd7="{{template.icd7}}"
+                                                    CPT1="{{template.CPT1}}" CPT2="{{template.CPT2}}" CPT3="{{template.CPT3}}"
+                                                    CPT4="{{template.CPT4}}" CPT5="{{template.CPT5}}" CPT6="{{template.CPT6}}"
+                                                    CPT7="{{template.CPT7}}" CPTUnit1="{{template.CPTUnit1}}" CPTUnit2="{{template.CPTUnit2}}"
+                                                    CPTUnit3="{{template.CPTUnit3}}" CPTUnit4="{{template.CPTUnit4}}"
+                                                    CPTUnit5="{{template.CPTUnit5}}" CPTUnit6="{{template.CPTUnit6}}"
+                                                    CPTUnit7="{{template.CPTUnit7}}" message="{{template.message}}"
+                                                    medical="{{template.medicalJustification}}" emr="{{template.emr}}"
+                                                    frequency="{{template.frequency}}" template_name="{{template.name}}">{{template.name}}</option>
+                                                {% endif %} {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-danger btn-send pt-2 btn-block" id="delete">Delete Template</button>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md-6 offset-md-2">
+                                        <div class="form-inline"> <label for="form_name">Name: &nbsp;</label> {{ form.name(id="template_name", type="text", class="form-control", placeholder="Template Name") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <script>
+                            $(function() {
+                                $('#delete').on('click',
+                                    function(e) {
+                                        e.preventDefault()
+                                        $.post('/medical_template/delete/' + $("#template").find('option:selected').attr("value"),
+                                            function(data) {
+                                                if (data.redirect) {
+                                                    window.location.href = data.redirect;
+                                                }
+                                            });
+                                        return false;
+                                    });
+                            });
+
+                            function resetForm() {
+                                document.getElementById("template_form").reset();
+                                var today = new Date();
+                                var end = new Date();
+                                end.setDate(end.getDate() + 90);
+                                var dd = String(today.getDate()).padStart(2, '0');
+                                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                var yyyy = today.getFullYear();
+                                today = mm + '/' + dd + '/' + yyyy;
+                                var dd = String(end.getDate()).padStart(2, '0');
+                                var mm = String(end.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                var yyyy = end.getFullYear();
+                                end = mm + '/' + dd + '/' + yyyy;
+                                document.getElementById('start_date').value = today;
+                                document.getElementById('end_date').value = end;
+                            }
+
+                            var fileInput = document.getElementById('files[]');
+                            var filesList = document.getElementById('fileList');
+                            var idBase = "fileInput_";
+                            var idCount = 0;
+
+                            var inputFileOnChange = function() {
+                                var existingLabel = this.parentNode.getElementsByTagName("LABEL")[0];
+                                var isLastInput = existingLabel.childNodes.length <= 1;
+
+                                if (!this.files[0]) {
+                                    if (!isLastInput) {
+                                        this.parentNode.parentNode.removeChild(this.parentNode);
+                                    }
+                                    return;
+                                }
+
+                                if (isLastInput) {
+                                    var newFileInput = document.createElement('input');
+                                    newFileInput.type = "file";
+                                    newFileInput.name = "files[]";
+                                    newFileInput.id = idBase + (++idCount);
+                                    newFileInput.onchange = inputFileOnChange;
+                                    filesList.appendChild(newFileInput);
+                                }
+                            }
+                            fileInput.onchange = inputFileOnChange;
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <!-- /.8 -->
+        </div>
+        <!-- /.row-->
+    </div>
+    <div class="row mt-3">
+    </div>
+</div>
+<div class="row mt-3">
+</div>
+{% if requests|length > 0 %}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table" id="my-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Member ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.member_ID }}</td>
+                    <td>{{ request.icd1 }}</td>
+                    <td>{{ request.icd2 }}</td>
+                    <td>{{ request.icd3 }}</td>
+                    <td>{{ request.icd4 }}</td>
+                    <td>{{ request.icd5 }}</td>
+                    <td>{{ request.icd6 }}</td>
+                    <td>{{ request.icd7 }}</td>
+                    <td>{{ request.CPT1 }}</td>
+                    <td>{{ request.CPTUnit1 }}</td>
+                    <td>{{ request.CPT2 }}</td>
+                    <td>{{ request.CPTUnit2 }}</td>
+                    <td>{{ request.CPT3 }}</td>
+                    <td>{{ request.CPTUnit3 }}</td>
+                    <td>{{ request.CPT4 }}</td>
+                    <td>{{ request.CPTUnit4 }}</td>
+                    <td>{{ request.CPT5 }}</td>
+                    <td>{{ request.CPTUnit5 }}</td>
+                    <td>{{ request.CPT6 }}</td>
+                    <td>{{ request.CPTUnit6 }}</td>
+                    <td>{{ request.CPT7 }}</td>
+                    <td>{{ request.CPTUnit7 }}</td>
+                    <td>{{ request.startDate.strftime('%m/%d/%Y') }}</td>
+                    <td>{{ request.endDate.strftime('%m/%d/%Y') }}</td>
+                    <td>{{ request.urgent }}</td>
+                    <td>{{ request.message }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>{{ request.submissionMessage }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_medical_request', request_id=request.id) }}" method="POST">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <form action="{{ url_for('medical_submit_authorization') }}" method="POST">
+                    <button class="btn btn-primary btn-send pt-2 btn-block " type="submit">Submit Authorization</button>
+                </form>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    for (var n = 0; n < 7; ++n) {
+                        $('#my-table > thead > tr:last').append('<th scope = "col">' + 'ICD 10' + '</th>');
+                    }
+                    for (var n = 0; n < 7; ++n) {
+                        $('#my-table > thead > tr:last').append('<th scope = "col">' + 'CPT' + '</th>');
+                        $('#my-table > thead > tr:last').append('<th scope = "col">' + '#' + '</th>');
+                    }
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Start Date' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'End Date' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Urgent' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Message' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Status' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Submission Message' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Delete' + '</th>');
+                });
+            </script>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="row mt-3">
+</div>
+{% endblock content %}

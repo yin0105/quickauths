@@ -1,0 +1,80 @@
+{% extends "layout.html" %} {% block content %}
+<div class="col-md-12">
+    <table class="table" id="my-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Request ID</th>
+                <th scope="col">Member ID</th>
+                <th scope="col">Insurance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+            <tr>
+                <td>{{ request.id }}</td>
+                <td>{{ request.member_ID }}</td>
+                <td>{{ request.insurance }}</td>
+                <td>{{ request.icd1 }}</td>
+                <td>{{ request.icd2 }}</td>
+                <td>{{ request.icd3 }}</td>
+                <td>{{ request.icd4 }}</td>
+                <td>{{ request.icd5 }}</td>
+                <td>{{ request.icd6 }}</td>
+                <td>{{ request.icd7 }}</td>
+                <td>{{ request.CPT1 }}</td>
+                <td>{{ request.CPTUnit1 }}</td>
+                <td>{{ request.CPT2 }}</td>
+                <td>{{ request.CPTUnit2 }}</td>
+                <td>{{ request.CPT3 }}</td>
+                <td>{{ request.CPTUnit3 }}</td>
+                <td>{{ request.CPT4 }}</td>
+                <td>{{ request.CPTUnit4 }}</td>
+                <td>{{ request.CPT5 }}</td>
+                <td>{{ request.CPTUnit5 }}</td>
+                <td>{{ request.CPT6 }}</td>
+                <td>{{ request.CPTUnit6 }}</td>
+                <td>{{ request.CPT7 }}</td>
+                <td>{{ request.CPTUnit7 }}</td>
+                <td>{{ request.startDate.strftime('%m/%d/%Y') }}</td>
+                <td>{{ request.endDate.strftime('%m/%d/%Y') }}</td>
+                <td>{{ request.urgent }}</td>
+                <td>{{ request.files }}</td>
+                <td>{{ request.message }}</td>
+                <td>{{ request.status }}</td>
+                <td>{{ request.submissionMessage }}</td>
+                <td>
+                    <form action="{{ url_for('delete_request', request_id=request.id) }}" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <form action="{{ url_for('submit_authorization') }}" method="POST">
+                <button class="btn btn-primary btn-send pt-2 btn-block " type="submit">Submit for authorization</button>
+            </form>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                for (var n = 0; n < 7; ++n) {
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'ICD 10' + '</th>');
+                }
+                for (var n = 0; n < 7; ++n) {
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + 'CPT' + '</th>');
+                    $('#my-table > thead > tr:last').append('<th scope = "col">' + '#' + '</th>');
+                }
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Start Date' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'End Date' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Urgent' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'File Path' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Message' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Status' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Submission Message' + '</th>');
+                $('#my-table > thead > tr:last').append('<th scope = "col">' + 'Delete' + '</th>');
+            });
+        </script>
+    </div>
+    {% endblock content %}

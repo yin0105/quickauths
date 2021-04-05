@@ -1,0 +1,54 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+    <div class=" text-center mt-2 ">
+        <h1>Prime Settings</h1>
+    </div>
+</div>
+<div class="row mt-3"></div>
+<div class="col-md-12">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="col-md-4">
+            <div class="form-group"> <label for="form_name">Username</label> {{ form.username(id="form_name", type="text", class="form-control", placeholder="Username", required="required") }} </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group"> <label for="form_name">Password</label> {{ form.password(id="password", type="text", class="form-control", placeholder="Password", required="required") }} </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group"> <label for="form_name">Provider Name</label> {{ form.provider(id="provider", type="text", class="form-control", placeholder="Provider Name", required="required") }} </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group"> <label for="form_name">Fax Number</label> {{ form.fax(id="fax", type="text", class="form-control", placeholder="Fax Number", required="required") }} </div>
+        </div>
+        <div class="row mt-3"></div>
+        <div class="col-md-1"><button type="submit" class="btn btn-primary btn-send pt-2 btn-block ">Add</button></div>
+        <div class="row mt-3"></div>
+    </form>
+    <table class="table" id="my-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">Provider</th>
+                <th scope="col">Fax Number</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for credential in credentials %}
+            <tr>
+                <td>{{ credential.username }}</td>
+                <td>{{ credential.password }}</td>
+                <td>{{ credential.provider }}</td>
+                <td>{{ credential.fax }}</td>
+                <td>
+                    <form action="{{ url_for('delete_prime_settings') }}" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

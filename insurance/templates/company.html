@@ -1,0 +1,39 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+    <div class=" text-center mt-2 ">
+        <h1>Companies</h1>
+    </div>
+</div>
+<div class="row mt-3"></div>
+<div class="col-md-12">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="col-md-4">
+            <div class="form-group"> <label for="form_name">Company Name</label> {{ form.name(id="form_name", type="text", class="form-control", placeholder="Company Name", required="required") }} </div>
+        </div>
+        <div class="row mt-3"></div>
+        <div class="col-md-1"><button type="submit" class="btn btn-primary btn-send pt-2 btn-block ">Add</button></div>
+    </form>
+    <div class="row mt-3"></div>
+    <table class="table" id="my-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Company Name</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in companies %}
+            <tr>
+                <td>{{ company.name }}</td>
+                <td>
+                    <form action="{{ url_for('delete_company', id=company.id) }}" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
